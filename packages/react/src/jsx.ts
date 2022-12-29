@@ -1,13 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import {
-	ElementType,
-	Key,
-	Props,
-	ReactElement,
-	REACT_ELEMENT_TYPE,
-	Ref
-} from 'shared';
+import { REACT_ELEMENT_TYPE } from 'shared/ReactSymbols';
+import { ElementType, Key, Props, ReactElement, Ref } from 'shared/ReactTypes';
 
 const ReactElement = function (
 	type: ElementType,

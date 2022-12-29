@@ -1,6 +1,6 @@
-export type Ref = string | null;
+export type Ref = string | null | { current: unknown };
 
-export type ElementType = string | ((props: Props) => ReactElement);
+export type ElementType = string | ((props: Props) => ReactElement) | null;
 export type Key = string | null | undefined;
 
 export type Props = {
