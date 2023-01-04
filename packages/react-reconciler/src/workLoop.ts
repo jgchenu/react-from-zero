@@ -44,10 +44,15 @@ function completeUnitOfWork(fiber: FiberNode) {
 	let node: FiberNode | null = fiber;
 
 	do {
-		completeWork(node);
-		const sibling = node.sibling;
+		const next = completeWork(node);
 
-		if (sibling !== null) {
+		if (next !== null) {
+			workInProgress = next;
+			return;
+		}
+
+		const sibling = node.sibling;
+		if (sibling) {
 			workInProgress = sibling;
 			return;
 		}

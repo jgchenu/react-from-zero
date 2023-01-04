@@ -9,7 +9,7 @@ const ReactElement = function (
 ): ReactElement {
 	const element: ReactElement = {
 		$$typeof: REACT_ELEMENT_TYPE,
-		type: type,
+		type,
 		key,
 		ref,
 		props,
@@ -29,8 +29,8 @@ function hasValidRef<T extends { ref?: string }>(config: T) {
 
 export const jsx = (type: ElementType, config: any, ...maybeChildren: any) => {
 	let key: Key = null;
-	const props: Props = {};
 	let ref: Ref = null;
+	const props: Props = {};
 
 	for (const prop in config) {
 		const val = config[prop];
@@ -46,7 +46,7 @@ export const jsx = (type: ElementType, config: any, ...maybeChildren: any) => {
 			}
 			continue;
 		}
-		if ({}.hasOwnProperty.call(config, prop)) {
+		if (Object.hasOwnProperty.call(config, prop)) {
 			props[prop] = val;
 		}
 	}

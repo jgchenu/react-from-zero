@@ -1,6 +1,9 @@
-export type Ref = string | null | { current: unknown };
+export type Ref =
+	| string
+	| null
+	| { current: unknown }
+	| ((current: unknown) => void);
 
-export type ElementType = string | ((props: Props) => ReactElement) | null;
 export type Key = string | null | undefined;
 
 export type Props = {
@@ -8,11 +11,17 @@ export type Props = {
 	children?: ReactElement;
 };
 
-export interface ReactElement {
+export type ElementType =
+	| string
+	| ((props: Props) => ReactElement | null | undefined);
+
+export type ReactElement = {
 	$$typeof: symbol | number;
 	type: ElementType;
 	key: Key;
 	props: Props;
 	ref: Ref;
 	__mark__: 'guang';
-}
+};
+
+export type Action<State> = State | ((prev: State) => State);
