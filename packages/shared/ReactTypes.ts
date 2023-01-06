@@ -1,14 +1,16 @@
-export type Ref =
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+export type Ref<T = any> =
 	| string
 	| null
-	| { current: unknown }
-	| ((current: unknown) => void);
+	| { current: T }
+	| ((current: T) => void);
 
 export type Key = string | null | undefined;
 
 export type Props = {
-	[key: string]: string | number | ReactElement | undefined;
-	children?: ReactElement;
+	[key: string]: string | number | ReactElement | ReactElement[] | undefined;
+	children?: ReactElement | ReactElement[];
 };
 
 export type ElementType =

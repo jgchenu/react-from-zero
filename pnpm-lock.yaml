@@ -78,6 +78,15 @@ importers:
     dependencies:
       shared: link:../shared
 
+  packages/react-dom:
+    specifiers: {}
+
+  packages/react-reconciler:
+    specifiers:
+      shared: workspace:*
+    dependencies:
+      shared: link:../shared
+
   packages/shared:
     specifiers:
       react: workspace:*

@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { REACT_ELEMENT_TYPE } from 'shared/ReactSymbols';
 import { ElementType, Key, Props, ReactElement, Ref } from 'shared/ReactTypes';
 
-const ReactElement = function (
+const reactElement = function (
 	type: ElementType,
 	key: Key,
 	ref: Ref,
@@ -27,7 +28,11 @@ function hasValidRef<T extends { ref?: string }>(config: T) {
 	return config.ref !== undefined;
 }
 
-export const jsx = (type: ElementType, config: any, ...maybeChildren: any) => {
+export const jsx = (
+	type: ElementType,
+	config: Record<string, any>,
+	...maybeChildren: any[]
+) => {
 	let key: Key = null;
 	let ref: Ref = null;
 	const props: Props = {};
@@ -60,5 +65,5 @@ export const jsx = (type: ElementType, config: any, ...maybeChildren: any) => {
 			props.children = maybeChildren;
 		}
 	}
-	return ReactElement(type, key, ref, props);
+	return reactElement(type, key, ref, props);
 };
