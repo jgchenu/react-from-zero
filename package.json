@@ -4,9 +4,10 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"build:dev": "rm -rf dist && rollup --config scripts/rollup/dev.config.js",
+		"demo": "vite serve demos/noop-renderer --config demos/vite.config.js --force",
 		"lint": "eslint --ext .ts,.jsx,.tsx --fix --quiet ./packages",
-		"prepare": "husky install"
+		"test": "jest --config scripts/jest/jest.config.js"
 	},
 	"keywords": [],
 	"author": "",

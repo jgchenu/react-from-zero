@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Props, Key, Ref, ElementType } from 'shared/ReactTypes';
-import { WorkTag } from './workTags';
+import { Props, Key, Ref, ElementType, ReactElement } from 'shared/ReactTypes';
+import { FunctionComponent, HostComponent, WorkTag } from './workTags';
 import { Flags, NoFlags } from './fiberFlags';
 import { Container } from 'hostConfig';
 
@@ -11,11 +11,12 @@ export class FiberNode {
 	stateNode: any;
 	ref: Ref;
 	flags: Flags;
+	subtreeFlags: Flags;
 
 	memoizedProps: Props | null;
 	pendingProps: Props;
 
-	memoizedState: unknown;
+	memoizedState: any;
 	updateQueue: unknown;
 
 	return: FiberNode | null;
@@ -52,6 +53,7 @@ export class FiberNode {
 		this.alternate = null;
 		// 副作用
 		this.flags = NoFlags;
+		this.subtreeFlags = NoFlags;
 	}
 }
 export class FiberRootNode {
@@ -59,10 +61,11 @@ export class FiberRootNode {
 	current: FiberNode;
 	finishedWork: FiberNode | null;
 
-	constructor(container: Container, current: FiberNode) {
-		this.finishedWork = null;
+	constructor(container: Container, hostRootFiber: FiberNode) {
 		this.container = container;
-		this.current = current;
+		this.current = hostRootFiber;
+		hostRootFiber.stateNode = this;
+		this.finishedWork = null;
 	}
 }
 
@@ -71,27 +74,36 @@ export const createWorkInProgress = (
 	pendingProps: Props
 ): FiberNode => {
 	let wip = current.alternate;
-
+	// mount
 	if (wip === null) {
-		// mount
 		wip = new FiberNode(current.tag, pendingProps, current.key);
-		wip.type = current.type;
-		wip.stateNode = current.stateNode;
 
 		wip.alternate = current;
 		current.alternate = wip;
 	} else {
-		// update
 		wip.pendingProps = pendingProps;
 		wip.flags = NoFlags;
-		wip.type = current.type;
+		wip.subtreeFlags = NoFlags;
 	}
-	wip.flags = current.flags;
-	wip.child = current.child;
 
-	// 数据
+	wip.type = current.type;
+	wip.stateNode = current.stateNode;
+	wip.updateQueue = current.updateQueue;
+	wip.child = current.child;
 	wip.memoizedProps = current.memoizedProps;
 	wip.memoizedState = current.memoizedState;
 
 	return wip;
 };
+
+export function createFiberFromElement(element: ReactElement): FiberNode {
+	const { type, key, props } = element;
+	let fiberTag: WorkTag = FunctionComponent;
+	if (typeof type === 'string') {
+		fiberTag = HostComponent;
+	} else if (typeof type !== 'function' && __DEV__) {
+		console.warn('未定义的type类型', element);
+	}
+	const fiber = new FiberNode(fiberTag, props, key);
+	return fiber;
+}

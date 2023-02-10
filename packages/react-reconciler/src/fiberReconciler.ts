@@ -1,6 +1,12 @@
 import { ReactElement } from 'shared/ReactTypes';
 import { FiberNode, FiberRootNode } from './fiber';
-import { createUpdateQueue } from './updateQueue';
+import {
+	createUpdate,
+	createUpdateQueue,
+	enqueueUpdate,
+	UpdateQueue
+} from './updateQueue';
+import { scheduleUpdateOnFiber } from './workLoop';
 import { HostRoot } from './workTags';
 
 export function createContainer(element: HTMLElement) {
@@ -10,6 +16,16 @@ export function createContainer(element: HTMLElement) {
 	return fiberRootNode;
 }
 
-export function updateContainer(element: ReactElement) {
-	//
+export function updateContainer(
+	element: ReactElement | null,
+	root: FiberRootNode
+) {
+	const hostRootFiber = root.current;
+	const update = createUpdate(element);
+	enqueueUpdate(
+		hostRootFiber.updateQueue as UpdateQueue<ReactElement | null>,
+		update
+	);
+	scheduleUpdateOnFiber(hostRootFiber);
+	return element;
 }

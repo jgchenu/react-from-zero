@@ -10,7 +10,7 @@ export type Key = string | null | undefined;
 
 export type Props = {
 	[key: string]: string | number | ReactElement | ReactElement[] | undefined;
-	children?: ReactElement | ReactElement[];
+	children?: ReactElement;
 };
 
 export type ElementType =

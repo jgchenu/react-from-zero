@@ -23,9 +23,9 @@ export const createUpdate = <State>(action: Action<State>): Update<State> => {
 	};
 };
 
-export const enqueueUpdate = <Action>(
-	updateQueue: UpdateQueue<Action>,
-	update: Update<Action>
+export const enqueueUpdate = <State>(
+	updateQueue: UpdateQueue<State>,
+	update: Update<State>
 ) => {
 	if (__LOG__) {
 		console.log('将update插入更新队列：', update);
@@ -43,8 +43,8 @@ export const enqueueUpdate = <Action>(
 	updateQueue.shared.pending = update;
 };
 
-export const createUpdateQueue = <Action>() => {
-	const updateQueue: UpdateQueue<Action> = {
+export const createUpdateQueue = <State>() => {
+	const updateQueue: UpdateQueue<State> = {
 		shared: {
 			pending: null
 		},
